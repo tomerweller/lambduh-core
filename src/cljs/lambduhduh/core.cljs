@@ -4,13 +4,13 @@
               [lambduhduh.events]
               [lambduhduh.subs]
               [lambduhduh.views :as views]
-              [lambduhduh.config :as config]))
-
+              [lambduhduh.config :as config]
+              [lambduhduh.util :refer [log]]))
 
 (defn dev-setup []
   (when config/debug?
     (enable-console-print!)
-    (println "dev mode")))
+    (log "init. dev mode")))
 
 (defn mount-root []
   (reagent/render [views/main-panel]

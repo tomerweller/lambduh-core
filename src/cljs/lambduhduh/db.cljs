@@ -1,4 +1,6 @@
 (ns lambduhduh.db)
 
 (def default-db
-  {:name "re-frame"})
+  {:bricks-map
+   {:a {:code "(defn square [x] (* x x))"}
+    :b {:code "(square 5)"}}})
