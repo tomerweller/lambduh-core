@@ -7,10 +7,11 @@
 (def ace-editor (r/adapt-react-class (aget js/deps "react-ace" "default")))
 
 (defn brick [id]
-  (let []
+  (let [code (re-frame/subscribe [:name])]
+    (print code)
     [:div#editor-container
      [ace-editor
-      {:value "(temp 1 2 3)"
+      {:value @code
        :name (str id)
        :mode "clojure"
        :theme "twilight"

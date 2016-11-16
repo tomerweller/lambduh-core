@@ -1,11 +1,12 @@
 (ns lambduhduh.core
-    (:require [reagent.core :as reagent]
-              [re-frame.core :as re-frame]
-              [lambduhduh.events]
-              [lambduhduh.subs]
-              [lambduhduh.views :as views]
-              [lambduhduh.config :as config]
-              [lambduhduh.util :refer [log]]))
+  (:require
+    [reagent.core :as reagent]
+    [re-frame.core :as re-frame]
+    [lambduhduh.events]
+    [lambduhduh.subs]
+    [lambduhduh.views :as views]
+    [lambduhduh.config :as config]
+    [lambduhduh.util :refer [log]]))
 
 (defn dev-setup []
   (when config/debug?
@@ -13,8 +14,9 @@
     (log "init. dev mode")))
 
 (defn mount-root []
-  (reagent/render [views/main-panel]
-                  (.getElementById js/document "app")))
+  (reagent/render
+    [views/main-panel]
+    (.getElementById js/document "app")))
 
 (defn ^:export init []
   (re-frame/dispatch-sync [:initialize-db])
