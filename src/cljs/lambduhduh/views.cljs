@@ -7,19 +7,24 @@
 (def ace-editor (r/adapt-react-class (aget js/deps "react-ace" "default")))
 
 (defn brick [id]
-  (let [code (re-frame/subscribe [:name])]
-    (print code)
+  (let [code (re-frame/subscribe [:brick id])]
     [:div#editor-container
      [ace-editor
       {:value @code
        :name (str id)
        :mode "clojure"
        :theme "twilight"
-       :height "150px"
+       :height "100px"
        :on-change #(log %)}]]))
 
-(defn main-panel []
-  (let [name (re-frame/subscribe [:name])]
+(defn root []
+  (let [name "Tomer"]
     (fn []
-      [:div "Hello from " @name
-       (brick "5")])))
+      [:div "Hello from " name
+       (brick :a)
+       (brick :b)
+       [:button
+        {:on-click #(log %)}
+        "Add code"]])))
+
+

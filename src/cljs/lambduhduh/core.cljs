@@ -15,7 +15,7 @@
 
 (defn mount-root []
   (reagent/render
-    [views/main-panel]
+    [views/root]
     (.getElementById js/document "app")))
 
 (defn ^:export init []

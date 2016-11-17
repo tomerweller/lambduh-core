@@ -6,3 +6,4 @@ out
 .idea
 node_modules
 *.iml
+.lein-repl-history

@@ -1,13 +1,18 @@
 (ns lambduhduh.subs
-    (:require-macros [reagent.ratom :refer [reaction]])
-    (:require [re-frame.core :as re-frame]))
+  (:require-macros [reagent.ratom :refer [reaction]])
+  (:require
+    [lambduhduh.util :refer [log]]
+    [re-frame.core :refer [reg-sub subscribe]]))
 
-(re-frame/reg-sub
- :name
- (fn [db]
-   (:code (:a (:bricks-map db)))))
+(reg-sub
+  :bricks-map
+  (fn [db  _]
+    (:bricks-map db)))
 
-;(re-frame/reg-sub
-;  :brick
-;  (fn [db]
-;    (:name db)))
+(reg-sub
+  :brick
+  :<- [:bricks-map]
+  (fn [bricks-map q _]
+    (let [brick-id (get q 1)]
+      (log "brick-id" brick-id)
+      (-> bricks-map brick-id :code))))
