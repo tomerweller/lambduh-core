@@ -14,5 +14,10 @@
   :<- [:bricks-map]
   (fn [bricks-map q _]
     (let [brick-id (get q 1)]
-      (log "brick-id" brick-id)
       (-> bricks-map brick-id :code))))
+
+(reg-sub
+  :bricks-keys
+  :<- [:bricks-map]
+  (fn [bricks-map _ _]
+    (keys bricks-map)))

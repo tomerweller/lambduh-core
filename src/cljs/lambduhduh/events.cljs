@@ -10,13 +10,6 @@
   (fn  [_ _]
     db/default-db))
 
-(reg-event-db
-  :brick-modify
-  (fn [db q]
-    (log "on event with db" db)
-    (log "q" q)
-    db))
-
 (defn next-id []
   (keyword (str (rand-int 9999))))
 
@@ -26,5 +19,11 @@
     (let [new-brick-id (next-id)
           new-brick {:code "(+ 1 2)"}
           new-db (assoc-in db [:bricks-map new-brick-id] new-brick)]
-      (log "new brick - added", new-brick-id, new-brick)
+      new-db)))
+
+(reg-event-db
+  :brick-change-code
+  (fn [db q]
+    (let [[_ brick-id code] q
+          new-db (assoc-in db [:bricks-map brick-id :code] code)]
       new-db)))

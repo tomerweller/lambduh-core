@@ -15,12 +15,15 @@
        :mode "clojure"
        :theme "twilight"
        :height "50px"
-       :on-change #(log %)}]]))
+       :on-change #(dispatch [:brick-change-code brick-id %])}]]))
 
 (defn root []
-  (let [bricks-map (subscribe [:bricks-map])]
-    [:div [:h1 "Lambduh"]
-     (doall (map (fn [brick-id] (brick brick-id)) (keys @bricks-map)))
-     [:button
-      {:on-click #(dispatch [:brick-add])}
-      "Add code"]]))
+  (fn []
+    (let [bricks-keys (subscribe [:bricks-keys])]
+      (log "rendering root")
+      (log "bricks-keys" @bricks-keys)
+      [:div [:h1 "Lambduh"]
+       (doall (map (fn [brick-id] (brick brick-id)) @bricks-keys))
+       [:button
+        {:on-click #(dispatch [:brick-add])}
+        "Add code"]])))
