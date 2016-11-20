@@ -1,30 +1,26 @@
 (ns lambduhduh.views
   (:require
-    [re-frame.core :as re-frame]
+    [re-frame.core :refer [subscribe dispatch]]
     [reagent.core :as r]
     [lambduhduh.util :refer [log]]))
 
 (def ace-editor (r/adapt-react-class (aget js/deps "react-ace" "default")))
 
-(defn brick [id]
-  (let [code (re-frame/subscribe [:brick id])]
-    [:div#editor-container
+(defn brick [brick-id]
+  (let [brick-code (subscribe [:brick-code brick-id])]
+    [:div#editor-container {:key brick-id}
      [ace-editor
-      {:value @code
-       :name (str id)
+      {:value @brick-code
+       :name (str brick-id)
        :mode "clojure"
        :theme "twilight"
-       :height "100px"
+       :height "50px"
        :on-change #(log %)}]]))
 
 (defn root []
-  (let [name "Tomer"]
-    (fn []
-      [:div "Hello from " name
-       (brick :a)
-       (brick :b)
-       [:button
-        {:on-click #(log %)}
-        "Add code"]])))
-
-
+  (let [bricks-map (subscribe [:bricks-map])]
+    [:div [:h1 "Lambduh"]
+     (doall (map (fn [brick-id] (brick brick-id)) (keys @bricks-map)))
+     [:button
+      {:on-click #(dispatch [:brick-add])}
+      "Add code"]]))

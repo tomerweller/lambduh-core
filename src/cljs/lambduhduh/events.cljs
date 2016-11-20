@@ -3,21 +3,28 @@
             [lambduhduh.db :as db]
             [lambduhduh.util :refer [log]]))
 
+;TODO: ADD INTERCEPTORS
+
 (reg-event-db
   :initialize-db
   (fn  [_ _]
     db/default-db))
 
-;UNTESTED
 (reg-event-db
-  :modify-brick
-  (fn [db _]
+  :brick-modify
+  (fn [db q]
     (log "on event with db" db)
+    (log "q" q)
     db))
 
-;(reg-event-db
-;  :add-todo
-;  []                                                        ;interceptors
-;  (fn [todos [text]]              ;; the "path" interceptor in `todo-interceptors` means 1st parameter is :todos
-;    (let [id (allocate-next-id todos)]
-;      (assoc todos id {:id id :title text :done false}))))
+(defn next-id []
+  (keyword (str (rand-int 9999))))
+
+(reg-event-db
+  :brick-add
+  (fn [db _]
+    (let [new-brick-id (next-id)
+          new-brick {:code "(+ 1 2)"}
+          new-db (assoc-in db [:bricks-map new-brick-id] new-brick)]
+      (log "new brick - added", new-brick-id, new-brick)
+      new-db)))

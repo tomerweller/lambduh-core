@@ -10,7 +10,7 @@
     (:bricks-map db)))
 
 (reg-sub
-  :brick
+  :brick-code
   :<- [:bricks-map]
   (fn [bricks-map q _]
     (let [brick-id (get q 1)]
