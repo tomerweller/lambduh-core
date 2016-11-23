@@ -21,9 +21,14 @@
           new-db (assoc-in db [:bricks-map new-brick-id] new-brick)]
       new-db)))
 
+(defn code->ast
+  [code]
+  (cljs.reader/read-string code))
+
 (reg-event-db
   :brick-change-code
   (fn [db q]
     (let [[_ brick-id code] q
-          new-db (assoc-in db [:bricks-map brick-id :code] code)]
-      new-db)))
+          db-with-code (assoc-in db [:bricks-map brick-id :code] code)
+          db-with-ast (assoc-in db-with-code [:bricks-map brick-id :ast] (code->ast code))]
+      db-with-ast)))

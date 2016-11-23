@@ -17,6 +17,13 @@
       (-> bricks-map brick-id :code))))
 
 (reg-sub
+  :brick-ast
+  :<- [:bricks-map]
+  (fn [bricks-map q _]
+    (let [brick-id (get q 1)]
+      (-> bricks-map brick-id :ast))))
+
+(reg-sub
   :bricks-keys
   :<- [:bricks-map]
   (fn [bricks-map _ _]
