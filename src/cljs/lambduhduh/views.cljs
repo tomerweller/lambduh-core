@@ -20,6 +20,14 @@
        :on-change #(dispatch [:brick-change-code brick-id %])}]
      [:p "ast (" brick-id ") " @brick-ast]]))
 
+(defn result-container []
+  (let [result (subscribe [:result])
+        ast-list (subscribe [:ast-list])]
+    (log "result is " @result)
+    [:div#result-container
+     [:p "result " @result]
+     [:p "ast list " @ ast-list]]))
+
 (defn root []
   (let [bricks-keys (subscribe [:bricks-keys])]
     (log "rendering root")
@@ -27,4 +35,5 @@
      (doall (map (fn [brick-id] ^{:key brick-id} [brick brick-id]) @bricks-keys))
      [:button
       {:on-click #(dispatch [:brick-add])}
-      "Add code"]]))
+      "Add code"]
+     [result-container]]))

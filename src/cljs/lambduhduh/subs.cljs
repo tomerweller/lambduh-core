@@ -10,21 +10,32 @@
     (:bricks-map db)))
 
 (reg-sub
+  :result
+  (fn [db  _]
+    (:result db)))
+
+(reg-sub
   :brick-code
   :<- [:bricks-map]
-  (fn [bricks-map q _]
-    (let [brick-id (get q 1)]
-      (-> bricks-map brick-id :code))))
+  (fn [bricks-map [_ brick-id] _]
+    (-> bricks-map brick-id :code)))
 
 (reg-sub
   :brick-ast
   :<- [:bricks-map]
-  (fn [bricks-map q _]
-    (let [brick-id (get q 1)]
-      (-> bricks-map brick-id :ast))))
+  (fn [bricks-map [_ brick-id] _]
+    (-> bricks-map brick-id :ast)))
 
 (reg-sub
   :bricks-keys
   :<- [:bricks-map]
   (fn [bricks-map _ _]
     (keys bricks-map)))
+
+(reg-sub
+  :ast-list
+  :<- [:bricks-map]
+  (fn [bricks-map _ _]
+    (let [ast-list (map #(-> % second :ast) bricks-map)]
+      (log "ast-list" ast-list)
+      ast-list)))
