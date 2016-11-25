@@ -10,7 +10,7 @@
   (let [brick-code (subscribe [:brick-code brick-id])
         brick-ast (subscribe [:brick-ast brick-id])]
     (log "rendering brick" brick-id)
-    ^{:key (str brick-id "-brick") } [:div#editor-container
+    ^{:key (str brick-id "-code") } [:div#editor-container
      [ace-editor
       {:value @brick-code
        :name (str brick-id)
@@ -18,15 +18,15 @@
        :theme "twilight"
        :height "50px"
        :on-change #(dispatch [:brick-change-code brick-id %])}]
-     [:p "ast (" brick-id ") " @brick-ast]]))
+    ^{:key (str brick-id "-ast") } [:p "ast (" brick-id ") " @brick-ast]]))
 
 (defn result-container []
   (let [result (subscribe [:result])
         ast-list (subscribe [:ast-list])]
-    (log "result is " @result)
+    (log "rendering result")
     [:div#result-container
-     [:p "result " @result]
-     [:p "ast list " @ ast-list]]))
+     [:p "ast list " @ ast-list]
+     [:p "result " @result]]))
 
 (defn root []
   (let [bricks-keys (subscribe [:bricks-keys])]

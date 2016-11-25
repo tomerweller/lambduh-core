@@ -25,17 +25,19 @@
   [code]
   (cljs.reader/read-string code))
 
-(defn ast->eval
-  [ast]
-  (rand-int 9999))
-
-
 (reg-event-db
   :brick-change-code
   (fn [db q]
     (let [[_ brick-id code] q
           ast (code->ast code)
           db-with-code (assoc-in db [:bricks-map brick-id :code] code)
-          db-with-ast (assoc-in db-with-code [:bricks-map brick-id :ast] ast)
-          db-with-result (assoc-in db-with-ast [:result] (ast->eval ast))]
-      db-with-result)))
+          db-with-ast (assoc-in db-with-code [:bricks-map brick-id :ast] ast)]
+      db-with-ast)))
+
+(reg-event-db
+  :new-result
+  (fn [db [_ result]]
+    (let [new-db (assoc-in db [:result] result)]
+      (log ":new-result " result)
+      (log "new-db " new-db)
+      new-db)))
