@@ -22,11 +22,16 @@
   (fn [bricks-map [_ brick-id] _]
     (-> bricks-map brick-id :code)))
 
+(defn code->ast
+  [code]
+  (cljs.reader/read-string code))
+
 (reg-sub
   :brick-ast
-  :<- [:bricks-map]
-  (fn [bricks-map [_ brick-id] _]
-    (-> bricks-map brick-id :ast)))
+  (fn [[_ brick-id], _]
+    (subscribe [:brick-code brick-id]))
+  (fn [brick-code]
+    (code->ast brick-code)))
 
 (reg-sub
   :bricks-keys
